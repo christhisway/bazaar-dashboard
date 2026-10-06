@@ -1,0 +1,9 @@
+__pycache__
+# Generated from proto/bazaar.proto by setup
+bazaar_dashboard/wire/generated/bazaar_pb2.py
+bazaar_dashboard/wire/generated/bazaar_pb2.pyi
+# Written by setup: names local paths
+tap/config.json
+# One directory per client session the dashboard saw
+runs/
+.pytest_cache
