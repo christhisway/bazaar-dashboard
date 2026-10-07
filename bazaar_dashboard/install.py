@@ -56,8 +56,15 @@ def ensure_requirements(install: bool, say=print) -> None:
     if not install:
         raise SetupError(f"missing {', '.join(missing)}; run: {sys.executable} -m pip install -r requirements.txt")
     say(f"installing {', '.join(missing)} ...")
-    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", str(settings.ROOT / "requirements.txt")],
-                   check=True)
+    requirements = settings.ROOT / "requirements.txt"
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", str(requirements)], check=True)
+    except subprocess.CalledProcessError:
+        raise SetupError(
+            f"pip could not install {', '.join(missing)} into {sys.executable} (its output is above). "
+            f"Install them yourself, e.g. `uv pip install --python {sys.executable} -r {requirements}`, "
+            "then run setup again."
+        ) from None
 
 
 def generate_bindings(say=print) -> None:

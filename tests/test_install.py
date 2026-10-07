@@ -94,6 +94,16 @@ def test_setup_refuses_a_directory_where_the_start_command_would_find_nothing(sa
                       say=lambda _: None)
 
 
+def test_a_failed_pip_install_says_what_to_do(monkeypatch):
+    def pip_fails(command, **_):
+        raise subprocess.CalledProcessError(1, command)
+
+    monkeypatch.setattr(install, "missing_requirements", lambda: ["protobuf"])
+    monkeypatch.setattr(install.subprocess, "run", pip_fails)
+    with pytest.raises(install.SetupError, match="Install them yourself"):
+        install.ensure_requirements(True, say=lambda _: None)
+
+
 def test_a_virtualenv_in_the_client_is_the_python_it_runs_under(tmp_path):
     venv_python = tmp_path / ".venv" / "bin" / "python"
     venv_python.parent.mkdir(parents=True)

@@ -14,6 +14,11 @@ import argparse
 import asyncio
 import sys
 
+# Checked before the imports below, which use syntax an older Python cannot parse.
+if sys.version_info < (3, 10):
+    sys.exit(f"error: the dashboard needs Python 3.10 or newer, but {sys.executable} is {sys.version.split()[0]}. "
+             "Point $PYTHON at a newer one, e.g. PYTHON=python3.12 ./setup.sh ...")
+
 from . import install, settings
 
 
